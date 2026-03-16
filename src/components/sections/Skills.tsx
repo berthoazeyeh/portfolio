@@ -24,6 +24,12 @@ const variantStyles: Record<Skill['variant'], { card: string; icon: string; bar:
     bar: 'bg-[var(--color-accent3)]',
     tag: 'group-hover/yellow:text-[var(--color-white)] group-hover/yellow:border-white/20',
   },
+  blue: {
+    card: 'hover:border-[#5b8fff]/30 group/blue',
+    icon: 'bg-[rgba(91,143,255,0.1)] text-[#5b8fff]',
+    bar: 'bg-[#5b8fff]',
+    tag: 'group-hover/blue:text-[var(--color-white)] group-hover/blue:border-white/20',
+  },
 }
 
 export default function Skills() {
