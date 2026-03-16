@@ -1,26 +1,143 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body:    'Instrument Sans', sans-serif;
+  --font-mono:    'JetBrains Mono', monospace;
+
+  --color-black:    #080a0f;
+  --color-surface:  #0d1017;
+  --color-card:     #111520;
+  --color-white:    #f0f2f7;
+  --color-muted:    #4a5270;
+  --color-muted2:   #8892b0;
+  --color-accent:   #5bffc8;
+  --color-accent2:  #ff6b6b;
+  --color-accent3:  #ffd166;
+
+  --spacing-section: 7rem;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* ── BASE ── */
+/* NE PAS remettre de reset * {} — Tailwind v4 Preflight le gère déjà */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-black);
+  color: var(--color-white);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  cursor: none;
 }
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.028;
+}
+
+/* ── REVEAL ANIMATIONS ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── HERO ANIMATIONS ── */
+.hero-tag-anim   { opacity: 0; animation: fadeUp 0.6s 0.20s ease forwards; }
+.hero-title-anim { opacity: 0; animation: fadeUp 0.7s 0.35s ease forwards; }
+.hero-bottom-anim{ opacity: 0; animation: fadeUp 0.7s 0.50s ease forwards; }
+.hero-scroll-anim{ opacity: 0; animation: fadeUp 0.7s 0.80s ease forwards; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── SCROLL HINT ── */
+.scroll-line::after {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 40px;
+  margin: 0 auto;
+  background: linear-gradient(to bottom, var(--color-muted), transparent);
+  animation: scrollLine 1.6s 1s ease-in-out infinite;
+}
+
+@keyframes scrollLine {
+  0%, 100% { opacity: 0; transform: scaleY(0); transform-origin: top; }
+  40%, 60%  { opacity: 1; transform: scaleY(1); }
+}
+
+/* ── PULSE DOT ── */
+.pulse-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--color-accent);
+  animation: pulse 2s ease infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(91,255,200,0.4); }
+  50%       { opacity: 0.7; box-shadow: 0 0 0 6px rgba(91,255,200,0); }
+}
+
+/* ── MARQUEE ── */
+.marquee-track {
+  animation: marquee 20s linear infinite;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ── CURSOR ── */
+#cursor {
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 9999;
+  pointer-events: none;
+  width: 10px; height: 10px;
+  background: var(--color-accent);
+  border-radius: 9999px;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s, height 0.2s;
+  mix-blend-mode: difference;
+}
+
+#cursor-ring {
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 9998;
+  pointer-events: none;
+  width: 36px; height: 36px;
+  border: 1.5px solid var(--color-accent);
+  border-radius: 9999px;
+  transform: translate(-50%, -50%);
+  transition: all 0.12s ease-out;
+  opacity: 0.5;
+}
+
+/* ── CODE SYNTAX ── */
+.code-kw  { color: var(--color-accent2); }
+.code-fn  { color: var(--color-accent); }
+.code-str { color: var(--color-accent3); }
+.code-cm  { color: var(--color-muted); font-style: italic; }
+.code-nm  { color: #c792ea; }
+.code-op  { color: var(--color-muted2); }
